@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <title>My Projext | Weather App</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <img src="../assets/images/logo.svg" alt="logo" />
+        <select name="unit" id="unit">
+          <option value="Unit" selected disabled hidden>Unit</option>
+          <option value="imperial">Imperial</option>
+          <option value="metric">Metric</option>
+        </select>
+      </nav>
+    </header>
+    <section class="upper-header">
+      <div class="text">
+        <h1>How's the sky looking today?</h1>
+      </div>
+      <div class="search-bar">
+        <input
+          type="search"
+          name="place"
+          id="place"
+          placeholder="
+        Search for a place..."
+        />
+        <button>Search</button>
+      </div>
+    </section>
+    <div class="main-section">
+      <section class="weather-info">
+        <div class="today-weather"></div>
+        <div class="daily-forecast"></div>
+      </section>
+      <aside class="monthly-forecast">
+        <div class="mini-dropdown">
+          <h4>Monthly forecast</h4>
+          <select name="day" id="day">
+            <option value="sunday">Sunday</option>
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+          </select>
+        </div>
+      </aside>
+    </div>
+  </body>
+  <script src="../js/script.js"></script>
+</html>
