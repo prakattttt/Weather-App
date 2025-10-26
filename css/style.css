@@ -68,6 +68,7 @@ header .navbar #unit {
     text-align: center;
     margin: 1.2em 0 1em 0;
     font-family: var(--font-heading);
+    font-size: 36px;
 }
 
 .upper-header .search-bar {
@@ -78,7 +79,7 @@ header .navbar #unit {
 .upper-header .search-bar #place{
     background-color: var(--neutral-800);
     color: var(--neutral-0);
-    width: 40%;
+    width: 300px;
     height: 36px;
     font-size: 15px;
     padding: 8px;
@@ -94,7 +95,7 @@ header .navbar #unit {
 
 .upper-header .search-bar .btn {
     padding: 8px;
-    width: 10%;
+    width: 80px;
     font-size: 14px;
     background-color: var(--blue-500);
     color: var(--neutral-0);
