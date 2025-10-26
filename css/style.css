@@ -58,4 +58,36 @@ header .navbar select {
     border-radius: 4px;
 }
 
+.upper-header .text h1 {
+    text-align: center;
+    margin: 1.2em 0 1em 0;
+    font-family: var(--font-heading);
+}
 
+.upper-header .search-bar {
+    justify-content: center;
+}
+
+.upper-header .search-bar #place{
+    background-color: var(--neutral-800);
+    width: 40%;
+    height: 36px;
+    font-size: 15px;
+    padding: 8px;
+    margin: 0 10px;
+    border-radius: 6px;
+    border: none;
+    background-image: url(../assets/images/icon-search.svg);
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-size: 16px;
+}
+
+.upper-header .search-bar .btn {
+    padding: 8px;
+    width: 8%;
+    background-color: var(--blue-500);
+    color: var(--neutral-0);
+    border: none;
+    border-radius: 8px;
+}
