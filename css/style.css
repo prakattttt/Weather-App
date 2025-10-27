@@ -79,7 +79,7 @@ header .navbar #unit {
 .upper-header .search-bar #place{
     background-color: var(--neutral-800);
     color: var(--neutral-0);
-    width: 300px;
+    width: 350px;
     height: 36px;
     font-size: 15px;
     padding: 8px;
@@ -93,9 +93,45 @@ header .navbar #unit {
     background-size: 16px;
 }
 
+.upper-header .search-bar #place:focus {
+    outline: none;
+}
+
+.upper-header .search-bar .input-container {
+    flex-direction: column;
+    position: relative;
+}
+
+.upper-header .search-bar .input-container .lists {
+    display: none;
+    z-index: 100;
+    position: absolute;      
+    top: 100%;               
+    left: 0;
+    width: calc(100% - 18px);
+    text-align: center;
+    background-color: var(--neutral-800);
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.upper-header .search-bar .input-container .lists li {
+    list-style: none;
+    padding: 10px;
+    margin: 5px;
+}
+
+.upper-header .search-bar .input-container .lists li:hover {
+    cursor: pointer;
+    background-color: var(--neutral-700);
+    border-radius: 6px;
+}
+
 .upper-header .search-bar .btn {
     padding: 8px;
     width: 80px;
+    height: 36px;
     font-size: 14px;
     background-color: var(--blue-500);
     color: var(--neutral-0);
