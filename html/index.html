@@ -23,30 +23,49 @@
       </div>
       <div class="search-bar flex">
         <div class="input-container flex">
-        <input
-          type="search"
-          name="place"
-          id="place"
-          placeholder="
+          <input
+            type="search"
+            name="place"
+            id="place"
+            placeholder="
         Search for a place..."
-        />
-        <ul class="lists">
-          <li>Kathmandu</li>
-          <li>Ottawa</li>
-          <li>Jhapa</li>
-        </ul>
+          />
+          <ul class="lists">
+            <li>Kathmandu</li>
+            <li>Ottawa</li>
+            <li>Jhapa</li>
+          </ul>
         </div>
         <button class="btn">Search</button>
       </div>
     </section>
-    <div class="main-section">
-      <section class="weather-info">
-        <div class="today-weather"></div>
-        <div class="daily-forecast"></div>
+    <div class="main-section flex">
+      <section class="weather-info flex">
+        <div class="today-weather flex">
+          <div class="actual-info"></div>
+          <div class="sub-info">
+            <div class="feels-like"></div>
+            <div class="humidity"></div>
+            <div class="wind"></div>
+            <div class="precipitation"></div>
+          </div>
+        </div>
+        <div class="daily-forecast flex">
+          <h4>Daily Forecast</h4>
+          <div class="days">
+            <div class="day1"></div>
+            <div class="day2"></div>
+            <div class="day3"></div>
+            <div class="day4"></div>
+            <div class="day5"></div>
+            <div class="day6"></div>
+            <div class="day7"></div>
+          </div>
+        </div>
       </section>
       <aside class="monthly-forecast">
-        <div class="mini-dropdown">
-          <h4>Monthly forecast</h4>
+        <div class="mini-dropdown flex">
+          <h4>Hourly forecast</h4>
           <select name="day" id="day">
             <option value="sunday">Sunday</option>
             <option value="monday">Monday</option>
@@ -56,6 +75,16 @@
             <option value="friday">Friday</option>
             <option value="saturday">Saturday</option>
           </select>
+        </div>
+        <div class="hours">
+          <div class="hour1"></div>
+          <div class="hour2"></div>
+          <div class="hour3"></div>
+          <div class="hour4"></div>
+          <div class="hour5"></div>
+          <div class="hour6"></div>
+          <div class="hour7"></div>
+          <div class="hour8"></div>
         </div>
       </aside>
     </div>
