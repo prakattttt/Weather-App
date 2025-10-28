@@ -68,7 +68,7 @@ header .navbar #unit {
 
 .upper-header .text h1 {
   text-align: center;
-  margin: 1.2em 0 1em 0;
+  margin: 1em 0 0.8em 0;
   font-family: var(--font-heading);
   font-size: 36px;
 }
