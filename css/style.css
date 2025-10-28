@@ -205,16 +205,46 @@ header .navbar #unit {
 }
 
 .main-section .hourly-forecast {
-    background-color: var(--neutral-600);
-    padding: 1.5em;
-    border-radius: 15px;
+  background-color: var(--neutral-800);
+  width: 275px;
+  padding: 1.2em 1em;
+  border-radius: 15px;
 }
 
 .main-section .hourly-forecast .mini-dropdown {
-    justify-content: space-between;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .main-section .hourly-forecast .mini-dropdown h4 {
-    font-weight: var(--fw-medium);
-      font-size: 16px;
+  font-weight: var(--fw-medium);
+  font-size: 15px;
+}
+
+.main-section .hourly-forecast .mini-dropdown #day {
+  background-color: var(--neutral-800);
+  color: var(--neutral-0);
+  border-radius: 4px;
+  appearance: none;
+  padding: 0.3em 0.6em 0.3em 0.3em;
+  background-image: url(../assets/images/icon-dropdown.svg);
+  background-repeat: no-repeat;
+  background-position: calc(100% - 10px) center;
+  font-size: 14px;
+  background-size: 12px, 10px;
+}
+
+.main-section .hourly-forecast .hours {
+  flex-direction: column;
+  gap: 10px;
+}
+
+.main-section .hourly-forecast .hours .hour {
+  background-color: var(--neutral-700);
+  border: 2px solid var(--neutral-600);
+  width: 100%;
+  height: 40px;
+  padding: 2px;
+  border-radius: 8px;
 }
