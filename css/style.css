@@ -84,14 +84,14 @@ header .navbar #unit {
   width: 350px;
   height: 36px;
   font-size: 15px;
-  padding: 8px;
+  padding: 0 1rem 0 2.5rem;
   margin: 0 10px;
   border-radius: 6px;
   border: none;
   font-weight: var(--fw-bold);
   background-image: url(../assets/images/icon-search.svg);
   background-repeat: no-repeat;
-  background-position: 10px center;
+  background-position: 0.75rem center;
   background-size: 16px;
 }
 
