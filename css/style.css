@@ -175,10 +175,10 @@ body {
 .box {
   width: 100%;
   margin: 1.25rem 0;
-  border: 0.125rem solid var(--neutral-600);
+  border: 0.125rem solid var(--neutral-700);
   border-radius: 0.9375rem;
   height: 5rem;
-  background-color: var(--neutral-700);
+  background-color: var(--neutral-800);
 }
 
 .daily-forecast {
@@ -199,8 +199,8 @@ body {
 .day {
   width: 100%;
   height: 6.25rem;
-  background-color: var(--neutral-700);
-  border: 0.125rem solid var(--neutral-600);
+  background-color: var(--neutral-800);
+  border: 0.125rem solid var(--neutral-700);
   border-radius: 0.9375rem;
 }
 
