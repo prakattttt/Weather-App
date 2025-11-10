@@ -27,7 +27,71 @@
       }
 
       .temperature img {
-        height: 6rem;
+        height: 5rem;
+      }
+
+      .actual-info {
+        padding: 1.5rem;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .location {
+        flex-direction: column;
+      }
+
+      .location .address {
+        font-size: 1.5rem;
+        font-weight: var(--fw-bold);
+      }
+
+      .location .date {
+        font-size: 1rem;
+        font-weight: var(--fw-light);
+        margin: 0.2rem;
+      }
+
+      .temperature {
+        align-items: center;
+      }
+
+      .temperature span {
+        margin-left: 1rem;
+        font-size: 4rem;
+        font-style: italic;
+        font-family: var(--font-heading);
+        font-weight: var(--fw-semibold);
+      }
+
+      .box p {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .sub-info p {
+        color: var(--neutral-300);
+        font-size: 1rem;
+        font-weight: var(--fw-light);
+      }
+
+      .sub-info p span {
+        color: #fff;
+        margin-top: 0.5rem;
+        font-size: 1.5rem;
+        font-weight: var(--fw-semibold);
+      }
+
+      .day {
+        padding: 0.5em;
+      }
+      
+      .day p {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
     </style>
     <section class="upper-header">
@@ -56,7 +120,7 @@
       <section class="weather-info">
         <div class="today-weather flex">
           <div class="actual-info flex">
-            <p class="location">
+            <p class="location flex">
               <span class="address">Berlin, Germany</span>
               <span class="date">Tuesday, Aug 5, 2025</span>
             </p>
@@ -83,13 +147,13 @@
         <div class="daily-forecast flex">
           <h4>Daily Forecast</h4>
           <div class="days flex">
-            <div class="day"><p>Tue<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
-            <div class="day"><p>Wed<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
-            <div class="day"><p>Thu<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
-            <div class="day"><p>Fri<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
-            <div class="day"><p>Sat<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
-            <div class="day"><p>Sun<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
-            <div class="day"><p>Mon<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
+            <div class="day"><p>Tue<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span></p></div>
+            <div class="day"><p>Wed<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span></p></div>
+            <div class="day"><p>Thu<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span></p></div>
+            <div class="day"><p>Fri<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span></p></div>
+            <div class="day"><p>Sat<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span></p></div>
+            <div class="day"><p>Sun<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span></p></div>
+            <div class="day"><p>Mon<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span></p></div>
           </div>
         </div>
       </section>
