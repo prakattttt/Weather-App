@@ -17,6 +17,19 @@
         </select>
       </nav>
     </header>
+    <style>
+      .day p img {
+        width: 4rem;
+      }
+
+      .hour p img {
+        width: 2rem;
+      }
+
+      .temperature img {
+        height: 6rem;
+      }
+    </style>
     <section class="upper-header">
       <div class="text">
         <h1>How's the sky looking today?</h1>
@@ -42,24 +55,41 @@
     <div class="main-section flex">
       <section class="weather-info">
         <div class="today-weather flex">
-          <div class="actual-info"></div>
+          <div class="actual-info flex">
+            <p class="location">
+              <span class="address">Berlin, Germany</span>
+              <span class="date">Tuesday, Aug 5, 2025</span>
+            </p>
+            <p class="temperature flex">
+              <img src="../assets/images/icon-rain.webp" alt="rain">
+              <span>20°C</span>
+            </p>
+          </div>
           <div class="sub-info flex">
-            <div class="feels-like box"></div>
-            <div class="humidity box"></div>
-            <div class="wind box"></div>
-            <div class="precipitation box"></div>
+            <div class="feels-like box">
+              <p>Feels Like<span id="feels-like-text">64°C</span></p>
+            </div>
+            <div class="humidity box">
+              <p>Humidity<span id="humidity-text">46%</span></p>
+            </div>
+            <div class="wind box">
+              <p>Wind<span id="wind-text">9 mph</span></p>
+            </div>
+            <div class="precipitation box">
+              <p>Precipitation<span id="precipitation-text">0 in</span></p>
+            </div>
           </div>
         </div>
         <div class="daily-forecast flex">
           <h4>Daily Forecast</h4>
           <div class="days flex">
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
+            <div class="day"><p>Tue<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
+            <div class="day"><p>Wed<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
+            <div class="day"><p>Thu<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
+            <div class="day"><p>Fri<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
+            <div class="day"><p>Sat<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
+            <div class="day"><p>Sun<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
+            <div class="day"><p>Mon<img src="../assets/images/icon-partly-cloudy.webp"><span>12°C</span><span>12°C</span></p></div>
           </div>
         </div>
       </section>
@@ -77,14 +107,14 @@
           </select>
         </div>
         <div class="hours flex">
-          <div class="hour"></div>
-          <div class="hour"></div>
-          <div class="hour"></div>
-          <div class="hour"></div>
-          <div class="hour"></div>
-          <div class="hour"></div>
-          <div class="hour"></div>
-          <div class="hour"></div>
+          <div class="hour"><p>1 PM<img src="../assets/images/icon-overcast.webp"></p></div>
+          <div class="hour"><p>1 PM<img src="../assets/images/icon-overcast.webp"></p></div>
+          <div class="hour"><p>1 PM<img src="../assets/images/icon-overcast.webp"></p></div>
+          <div class="hour"><p>1 PM<img src="../assets/images/icon-overcast.webp"></p></div>
+          <div class="hour"><p>1 PM<img src="../assets/images/icon-overcast.webp"></p></div>
+          <div class="hour"><p>1 PM<img src="../assets/images/icon-overcast.webp"></p></div>
+          <div class="hour"><p>1 PM<img src="../assets/images/icon-overcast.webp"></p></div>
+          <div class="hour"><p>1 PM<img src="../assets/images/icon-overcast.webp"></p></div>
         </div>
       </aside>
     </div>
