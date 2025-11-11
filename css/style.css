@@ -204,6 +204,14 @@ body {
   border-radius: 0.9375rem;
 }
 
+.daily-temp {
+  font-size: 0.8rem;
+}
+
+.daily-temp span {
+  padding: 0.55rem;
+}
+
 .hourly-forecast {
   background-color: var(--neutral-800);
   width: 17.1875rem;
@@ -250,10 +258,9 @@ body {
 }
 
 .hour p {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
-
 
 @media (max-width: 1250px) {
   body {
@@ -308,6 +315,11 @@ body {
   .day {
     width: 7.25rem;
     height: 10rem;
+  }
+
+  .daily-temp span {
+    font-size: 1rem;
+    padding: 0.75rem;
   }
 
   .day p img {
