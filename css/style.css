@@ -197,11 +197,19 @@ body {
 }
 
 .day {
-  width: 100%;
+  max-width: 5.125rem;
   height: 8rem;
   background-color: var(--neutral-800);
   border: 0.125rem solid var(--neutral-700);
   border-radius: 0.9375rem;
+}
+
+.daily-temp {
+  font-size: 0.8rem;
+}
+
+.daily-temp span {
+  padding: 0.55rem;
 }
 
 .hourly-forecast {
@@ -250,10 +258,9 @@ body {
 }
 
 .hour p {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
-
 
 @media (max-width: 1250px) {
   body {
@@ -306,8 +313,14 @@ body {
   }
 
   .day {
+    max-width: none;
     width: 7.25rem;
     height: 10rem;
+  }
+
+  .daily-temp span {
+    font-size: 1rem;
+    padding: 0.75rem;
   }
 
   .day p img {
