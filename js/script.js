@@ -1,5 +1,5 @@
 let URL = "";
-let data = "";
+let index = "";
 
 const today = new Date();
 
@@ -51,23 +51,55 @@ const addTodayDetails = (data) => {
   document.querySelector(
     "#precipitation-text"
   ).textContent = `${data.current.precipitation} ${data.current_units.precipitation}`;
+  const icon = getWeatherIcon(data.current.weather_code);
+  const image = document.querySelector('.temperature img');
+  image.src = `../assets/images/icon-${icon}.webp`;
 };
 
-const addHourlyDetails = (data) => {
-  const week = document.querySelectorAll('.weekday');
+const addDailyDetails = (data) => {
+  const week = document.querySelectorAll(".weekday");
   week.forEach((w, i) => {
     const date = new Date();
     date.setDate(today.getDate() + i);
     w.textContent = date.toLocaleDateString("en-US", { weekday: "short" });
   });
-  const min = document.querySelectorAll('.daily-min');
+
+  const image = document.querySelectorAll('.day p img');
+  image.forEach((img, i) => {
+      const icon = getWeatherIcon(data.daily.weather_code[i]);
+      img.src = `../assets/images/icon-${icon}.webp`;
+  })
+  const min = document.querySelectorAll(".daily-min");
   min.forEach((mn, i) => {
     mn.textContent = data.daily.temperature_2m_min[i];
-  })
-    const max = document.querySelectorAll('.daily-max');
+  });
+  const max = document.querySelectorAll(".daily-max");
   max.forEach((mx, i) => {
     mx.textContent = data.daily.temperature_2m_max[i];
+  });
+};
+
+const addHourlyDetails = (data) => {
+  const hours = document.querySelectorAll(".time-hour");
+  hours.forEach((hr, i) => {
+    let d = new Date();
+    d.setHours(d.getHours() + i);
+    hr.textContent = d.toLocaleTimeString([], {
+      hour: "2-digit",
+      hour12: true,
+    });
+  });
+  const image = document.querySelectorAll('.hour p img');
+  image.forEach((img, i) => {
+      const icon = getWeatherIcon(data.hourly.weather_code[today.getHours() + i]);
+      img.src = `../assets/images/icon-${icon}.webp`;
   })
+  const temp = document.querySelectorAll(".hourly-temp");
+  temp.forEach((t, i) => {
+    t.textContent = `${data.hourly.temperature_2m[today.getHours() + i]}${
+      data.hourly_units.temperature_2m
+    }`;
+  });
 };
 
 navigator.geolocation.getCurrentPosition(
@@ -75,11 +107,32 @@ navigator.geolocation.getCurrentPosition(
     const data = await fetchData(pos.coords.latitude, pos.coords.longitude);
     addTodayDetails(data);
     addHourlyDetails(data);
+    addDailyDetails(data);
   },
   async () => {
     console.log("Location blocked. Using default: Kathmandu");
     const data = await fetchData(27.7172, 85.324);
     addTodayDetails(data);
     addHourlyDetails(data);
+    addDailyDetails(data);
   }
 );
+
+function getWeatherIcon(code) {
+  if (code === 0) return "sunny";
+
+  if ([1, 2].includes(code)) return "partly-cloudy";
+  if (code === 3) return "overcast";
+
+  if ([45, 48].includes(code)) return "fog";
+
+  if ([51, 53, 55, 56, 57].includes(code)) return "drizzle";
+
+  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "rain";
+
+  if ([71, 73, 75, 77, 85, 86].includes(code)) return "snow";
+
+  if ([95, 96, 99].includes(code)) return "storm";
+
+  return "sunny"; 
+}
