@@ -1,5 +1,5 @@
 let URL = "";
-let data= "";
+let data = "";
 
 const today = new Date();
 
@@ -25,33 +25,61 @@ const fetchData = async (lat, lon) => {
 };
 
 const addTodayDetails = (data) => {
-  const address = document.querySelector('.address');
-  const date = document.querySelector('.date');
-  address.textContent = data.timezone.split('/')[1];
-  const options = { 
-  weekday: 'long',   
-  year: 'numeric',   
-  month: 'short',   
-  day: 'numeric'     
+  const address = document.querySelector(".address");
+  const date = document.querySelector(".date");
+  address.textContent = data.timezone.split("/")[1];
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  const newDate = today.toLocaleDateString("en-US", options);
+  date.textContent = newDate;
+  document.querySelector(
+    "#temp"
+  ).textContent = `${data.current.temperature_2m}${data.current_units.temperature_2m}`;
+  document.querySelector(
+    "#feels-like-text"
+  ).textContent = `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`;
+  document.querySelector(
+    "#humidity-text"
+  ).textContent = `${data.current.relative_humidity_2m}${data.current_units.relative_humidity_2m}`;
+  document.querySelector(
+    "#wind-text"
+  ).textContent = `${data.current.wind_speed_10m} ${data.current_units.wind_speed_10m}`;
+  document.querySelector(
+    "#precipitation-text"
+  ).textContent = `${data.current.precipitation} ${data.current_units.precipitation}`;
 };
-const newDate = today.toLocaleDateString('en-US', options);
-date.textContent = newDate;
-document.querySelector('#temp').textContent = `${data.current.temperature_2m}${data.current_units.temperature_2m}`;
-document.querySelector('#feels-like-text').textContent = `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`;
-document.querySelector('#humidity-text').textContent = `${data.current.relative_humidity_2m}${data.current_units.relative_humidity_2m}`;
-document.querySelector('#wind-text').textContent = `${data.current.wind_speed_10m} ${data.current_units.wind_speed_10m}`;
-document.querySelector('#precipitation-text').textContent = `${data.current.precipitation} ${data.current_units.precipitation}`;
 
+const addHourlyDetails = (data) => {
+  const week = document.querySelectorAll('.weekday');
+  week.forEach((w, i) => {
+    const date = new Date();
+    date.setDate(today.getDate() + i);
+    w.textContent = date.toLocaleDateString("en-US", { weekday: "short" });
+  });
+  const min = document.querySelectorAll('.daily-min');
+  min.forEach((mn, i) => {
+    mn.textContent = data.daily.temperature_2m_min[i];
+  })
+    const max = document.querySelectorAll('.daily-max');
+  max.forEach((mx, i) => {
+    mx.textContent = data.daily.temperature_2m_max[i];
+  })
 };
 
 navigator.geolocation.getCurrentPosition(
   async (pos) => {
     const data = await fetchData(pos.coords.latitude, pos.coords.longitude);
     addTodayDetails(data);
+    addHourlyDetails(data);
   },
   async () => {
     console.log("Location blocked. Using default: Kathmandu");
-    const data = await fetchData(27.7172, 85.3240);
+    const data = await fetchData(27.7172, 85.324);
     addTodayDetails(data);
+    addHourlyDetails(data);
   }
 );
