@@ -6,15 +6,73 @@ const today = new Date();
 const searchPlace = document.querySelector("#place");
 const lists = document.querySelector(".lists");
 
-searchPlace.addEventListener("input", () => {
-  if (searchPlace.value !== "") {
-    searchPlace.style.backgroundImage = "none";
-    lists.style.display = "block";
-  } else {
-    searchPlace.style.backgroundImage = "url(../assets/images/icon-search.svg)";
-    lists.style.display = "none";
-  }
-});
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+function normalize(name) {
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+searchPlace.addEventListener(
+  "input",
+  debounce(async () => {
+    const query = searchPlace.value.trim();
+
+    if (query !== "") {
+      searchPlace.style.backgroundImage = "none";
+      lists.style.display = "block";
+
+      const cities = await fetchCities(query);
+
+      if (!cities || !cities.results || cities.results.length === 0) {
+        lists.innerHTML = "<li>No results found</li>";
+        return;
+      }
+
+      let items = "";
+      let city = [];
+
+      for (let i = 0; i < cities.results.length; i++) {
+        const originalName = cities.results[i].name;
+        const normalizedName = normalize(originalName);
+
+        if (!city.includes(normalizedName)) {
+          city.push(normalizedName);
+          items += `<li>${originalName}</li>`;
+        }
+      }
+
+      lists.innerHTML = items;
+    } else {
+      searchPlace.style.backgroundImage =
+        "url(../assets/images/icon-search.svg)";
+      lists.style.display = "none";
+      lists.innerHTML = "";
+    }
+  }, 800)
+);
+
+const fetchCities = async (place) => {
+  const URL = `https://geocoding-api.open-meteo.com/v1/search?name=${place}&count=10&language=en&format=json`;
+  const res = await fetch(URL);
+  return res.json();
+};
 
 const fetchData = async (lat, lon) => {
   const URL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto`;
