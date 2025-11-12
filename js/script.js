@@ -52,7 +52,7 @@ const addTodayDetails = (data) => {
     "#precipitation-text"
   ).textContent = `${data.current.precipitation} ${data.current_units.precipitation}`;
   const icon = getWeatherIcon(data.current.weather_code);
-  const image = document.querySelector('.temperature img');
+  const image = document.querySelector(".temperature img");
   image.src = `../assets/images/icon-${icon}.webp`;
 };
 
@@ -64,11 +64,11 @@ const addDailyDetails = (data) => {
     w.textContent = date.toLocaleDateString("en-US", { weekday: "short" });
   });
 
-  const image = document.querySelectorAll('.day p img');
+  const image = document.querySelectorAll(".day p img");
   image.forEach((img, i) => {
-      const icon = getWeatherIcon(data.daily.weather_code[i]);
-      img.src = `../assets/images/icon-${icon}.webp`;
-  })
+    const icon = getWeatherIcon(data.daily.weather_code[i]);
+    img.src = `../assets/images/icon-${icon}.webp`;
+  });
   const min = document.querySelectorAll(".daily-min");
   min.forEach((mn, i) => {
     mn.textContent = data.daily.temperature_2m_min[i];
@@ -89,11 +89,11 @@ const addHourlyDetails = (data) => {
       hour12: true,
     });
   });
-  const image = document.querySelectorAll('.hour p img');
+  const image = document.querySelectorAll(".hour p img");
   image.forEach((img, i) => {
-      const icon = getWeatherIcon(data.hourly.weather_code[today.getHours() + i]);
-      img.src = `../assets/images/icon-${icon}.webp`;
-  })
+    const icon = getWeatherIcon(data.hourly.weather_code[today.getHours() + i]);
+    img.src = `../assets/images/icon-${icon}.webp`;
+  });
   const temp = document.querySelectorAll(".hourly-temp");
   temp.forEach((t, i) => {
     t.textContent = `${data.hourly.temperature_2m[today.getHours() + i]}${
@@ -134,5 +134,5 @@ function getWeatherIcon(code) {
 
   if ([95, 96, 99].includes(code)) return "storm";
 
-  return "sunny"; 
+  return "sunny";
 }
