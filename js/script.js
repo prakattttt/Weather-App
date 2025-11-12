@@ -5,14 +5,7 @@ const today = new Date();
 
 const searchPlace = document.querySelector("#place");
 const lists = document.querySelector(".lists");
-
-function debounce(fn, delay) {
-  let timer;
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
+const button = document.querySelector(".btn");
 
 function debounce(fn, delay) {
   let timer;
@@ -71,7 +64,9 @@ searchPlace.addEventListener(
 const fetchCities = async (place) => {
   const URL = `https://geocoding-api.open-meteo.com/v1/search?name=${place}&count=10&language=en&format=json`;
   const res = await fetch(URL);
-  return res.json();
+  const data = await res.json();
+  console.log(data);
+  return data;
 };
 
 const fetchData = async (lat, lon) => {
@@ -116,49 +111,61 @@ const addTodayDetails = (data) => {
 
 const addDailyDetails = (data) => {
   const week = document.querySelectorAll(".weekday");
-  week.forEach((w, i) => {
-    const date = new Date();
-    date.setDate(today.getDate() + i);
-    w.textContent = date.toLocaleDateString("en-US", { weekday: "short" });
-  });
-
   const image = document.querySelectorAll(".day p img");
-  image.forEach((img, i) => {
-    const icon = getWeatherIcon(data.daily.weather_code[i]);
-    img.src = `../assets/images/icon-${icon}.webp`;
-  });
   const min = document.querySelectorAll(".daily-min");
-  min.forEach((mn, i) => {
-    mn.textContent = data.daily.temperature_2m_min[i];
-  });
   const max = document.querySelectorAll(".daily-max");
-  max.forEach((mx, i) => {
-    mx.textContent = data.daily.temperature_2m_max[i];
-  });
+
+  for (let i = 0; i < week.length; i++) {
+    const timestamp = data.daily.time[i];
+    const dateObj = new Date(timestamp);
+    week[i].textContent = dateObj.toLocaleDateString("en-US", {
+      weekday: "short",
+    });
+
+    const icon = getWeatherIcon(data.daily.weather_code[i]);
+    image[i].src = `../assets/images/icon-${icon}.webp`;
+
+    min[i].textContent = data.daily.temperature_2m_min[i];
+    max[i].textContent = data.daily.temperature_2m_max[i];
+  }
 };
 
 const addHourlyDetails = (data) => {
   const hours = document.querySelectorAll(".time-hour");
-  hours.forEach((hr, i) => {
-    let d = new Date();
-    d.setHours(d.getHours() + i);
-    hr.textContent = d.toLocaleTimeString([], {
+  const image = document.querySelectorAll(".hour p img");
+  const temp = document.querySelectorAll(".hourly-temp");
+
+  const currentTime = data.current.time;
+
+  let startIndex = data.hourly.time.indexOf(currentTime);
+
+  if (startIndex === -1) {
+    startIndex = data.hourly.time.findIndex(
+      (t) => new Date(t) > new Date(currentTime)
+    );
+  }
+
+  if (startIndex === -1) startIndex = 0;
+
+  for (let i = 0; i < hours.length; i++) {
+    const idx = startIndex + i;
+    if (idx >= data.hourly.time.length) break;
+
+    const timestamp = data.hourly.time[idx];
+    const dateObj = new Date(timestamp);
+
+    hours[i].textContent = dateObj.toLocaleTimeString([], {
       hour: "2-digit",
       hour12: true,
     });
-  });
-  const image = document.querySelectorAll(".hour p img");
-  image.forEach((img, i) => {
-    const icon = getWeatherIcon(data.hourly.weather_code[today.getHours() + i]);
-    img.src = `../assets/images/icon-${icon}.webp`;
-  });
-  const temp = document.querySelectorAll(".hourly-temp");
-  temp.forEach((t, i) => {
-    t.textContent = `${data.hourly.temperature_2m[today.getHours() + i]}${
-      data.hourly_units.temperature_2m
-    }`;
-  });
+
+    const icon = getWeatherIcon(data.hourly.weather_code[idx]);
+    image[i].src = `../assets/images/icon-${icon}.webp`;
+
+    temp[i].textContent = `${data.hourly.temperature_2m[idx]}${data.hourly_units.temperature_2m}`;
+  }
 };
+
 
 navigator.geolocation.getCurrentPosition(
   async (pos) => {
@@ -168,7 +175,7 @@ navigator.geolocation.getCurrentPosition(
     addDailyDetails(data);
   },
   async () => {
-    console.log("Location blocked. Using default: Kathmandu");
+    alert("Location blocked. Using default: Kathmandu");
     const data = await fetchData(27.7172, 85.324);
     addTodayDetails(data);
     addHourlyDetails(data);
@@ -194,3 +201,30 @@ function getWeatherIcon(code) {
 
   return "sunny";
 }
+
+document.addEventListener("click", () => {
+  lists.style.display = "none";
+});
+
+button.addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  const location = searchPlace.value.trim();
+  const cities = await fetchCities(location);
+  if (!cities || !cities.results || cities.results.length === 0) {
+    alert("No cities found! Try again!");
+  }
+  const data = await fetchData(
+    cities.results[0].latitude,
+    cities.results[0].longitude
+  );
+  addTodayDetails(data);
+  addHourlyDetails(data);
+  addDailyDetails(data);
+});
+
+lists.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  searchPlace.value = e.target.textContent;
+});
