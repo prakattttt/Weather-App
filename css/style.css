@@ -165,11 +165,58 @@ body {
   width: 100%;
   background-repeat: no-repeat;
   border-radius: 1.25rem;
+  padding: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.temperature {
+  align-items: center;
+}
+
+.temperature span {
+  margin-left: 1rem;
+  font-size: 4rem;
+  font-style: italic;
+  font-family: var(--font-heading);
+  font-weight: var(--fw-semibold);
+}
+
+.temperature img {
+  height: 6rem;
+}
+
+.location {
+  flex-direction: column;
+}
+
+.location .address {
+  font-size: 1.5rem;
+  font-weight: var(--fw-bold);
+}
+
+.location .date {
+  font-size: 1rem;
+  font-weight: var(--fw-light);
+  margin: 0.2rem;
 }
 
 .sub-info {
   width: 100%;
   gap: 1.25rem;
+}
+
+.sub-info p {
+  color: var(--neutral-300);
+  font-size: 1rem;
+  font-weight: var(--fw-light);
+}
+
+.sub-info p span {
+  color: #fff;
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: var(--fw-semibold);
 }
 
 .box {
@@ -179,6 +226,14 @@ body {
   border-radius: 0.9375rem;
   height: 5rem;
   background-color: var(--neutral-800);
+}
+
+.box p {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .daily-forecast {
@@ -198,10 +253,24 @@ body {
 
 .day {
   max-width: 5.125rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.35em;
   height: 8rem;
   background-color: var(--neutral-800);
   border: 0.125rem solid var(--neutral-700);
   border-radius: 0.9375rem;
+}
+
+.day p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.day p img {
+  width: 4rem;
 }
 
 .daily-temp {
@@ -249,17 +318,25 @@ body {
 }
 
 .hour {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: var(--neutral-700);
   border: 0.125rem solid var(--neutral-600);
   width: 100%;
   height: 2.7rem;
-  padding: 0.125rem;
+  padding: 0 1rem;
   border-radius: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 .hour p {
   display: flex;
   align-items: center;
+}
+
+.hour p img {
+  width: 2rem;
 }
 
 @media (max-width: 1250px) {
