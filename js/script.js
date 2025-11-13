@@ -1,11 +1,25 @@
-let URL = "";
-let index = "";
+let unit = "metric";
+let currCity = null;
+let currLat = null;
+let currLon = null;
 
 const today = new Date();
 
 const searchPlace = document.querySelector("#place");
 const lists = document.querySelector(".lists");
 const button = document.querySelector(".btn");
+const select = document.querySelector("#unit");
+
+select.addEventListener("change", async (e) => {
+  unit = e.target.value;
+  
+  if (currLat && currLon) {
+    const data = await fetchData(currLat, currLon);
+    addTodayDetails(data, currCity);
+    addHourlyDetails(data);
+    addDailyDetails(data);
+  }
+});
 
 function debounce(fn, delay) {
   let timer;
@@ -81,7 +95,12 @@ const fetchCities = async (place) => {
 };
 
 const fetchData = async (lat, lon) => {
-  const URL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto`;
+  let URL = "";
+  if (unit === "metric") {
+    URL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto`;
+  } else {
+    URL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`;
+  }
   const res = await fetch(URL);
   const data = await res.json();
   console.log(data);
@@ -182,6 +201,9 @@ const addHourlyDetails = (data) => {
 navigator.geolocation.getCurrentPosition(
   async (pos) => {
     const data = await fetchData(pos.coords.latitude, pos.coords.longitude);
+    currLat = pos.coords.latitude;
+    currLon = pos.coords.longitude;
+    currCity = "Your Location";
     addTodayDetails(data, "Your Location");
     addHourlyDetails(data);
     addDailyDetails(data);
@@ -189,7 +211,10 @@ navigator.geolocation.getCurrentPosition(
   async () => {
     alert("Location blocked. Using default: Kathmandu");
     const data = await fetchData(27.7172, 85.324);
-    addTodayDetails(data);
+    currLat = 27.7172;
+    currLon = 85.324;
+    currCity = "Kathmandu";
+    addTodayDetails(data, "Kathmandu");
     addHourlyDetails(data);
     addDailyDetails(data);
   }
@@ -233,6 +258,9 @@ button.addEventListener("click", async (e) => {
   addTodayDetails(data, cities.results[0].name);
   addHourlyDetails(data);
   addDailyDetails(data);
+  currCity = cities.results[0].name;
+  currLat = cities.results[0].latitude;
+  currLon = cities.results[0].longitude;
 });
 
 lists.addEventListener("click", (e) => {
