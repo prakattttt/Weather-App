@@ -10,6 +10,7 @@ const searchPlace = document.querySelector("#place");
 const lists = document.querySelector(".lists");
 const button = document.querySelector(".btn");
 const select = document.querySelector("#unit");
+const container = document.querySelector(".container");
 
 function populateDays() {
   selectDay.innerHTML = "";
@@ -102,22 +103,34 @@ function setImage() {
 }
 
 const fetchCities = async (place) => {
-  const URL = `https://geocoding-api.open-meteo.com/v1/search?name=${place}&count=10&language=en&format=json`;
-  const res = await fetch(URL);
-  const data = await res.json();
-  return data;
+  try {
+    const URL = `https://geocoding-api.open-meteo.com/v1/search?name=${place}&count=10&language=en&format=json`;
+    const res = await fetch(URL);
+    if (!res.ok) throw new Error("Invalid response!");
+    const data = await res.json();
+    if (!data) throw new Error("Failed to retrive data!");
+    return data;
+  } catch (err) {
+    errorHandler(err.message);
+  }
 };
 
 const fetchData = async (lat, lon) => {
-  let URL = "";
-  if (unit === "metric") {
-    URL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto`;
-  } else {
-    URL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`;
+  try {
+    let URL = "";
+    if (unit === "metric") {
+      URL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto`;
+    } else {
+      URL = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&hourly=temperature_2m,weather_code&current=temperature_2m,precipitation,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=auto&wind_speed_unit=mph&temperature_unit=fahrenheit&precipitation_unit=inch`;
+    }
+    const res = await fetch(URL);
+    if (!res.ok) throw new Error("Invalid response!");
+    const data = await res.json();
+    if (!data) throw new Error("Failed to retrive data!");
+    return data;
+  } catch (err) {
+    errorHandler(err.message);
   }
-  const res = await fetch(URL);
-  const data = await res.json();
-  return data;
 };
 
 const addTodayDetails = (data, city) => {
@@ -253,3 +266,17 @@ lists.addEventListener("click", (e) => {
   e.preventDefault();
   searchPlace.value = e.target.textContent;
 });
+
+function errorHandler(err) {
+  container.classList.add("err");
+  container.innerHTML = `<h2>Something went wrong!</h2>
+  <p>${err || "Unknown Error!"}</p>
+  <button id="refresh">Refresh</button>`;
+
+  const refresh = document.querySelector("#refresh");
+
+  refresh.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.location.reload();
+  });
+}
