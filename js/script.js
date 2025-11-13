@@ -22,44 +22,55 @@ function normalize(name) {
     .toLowerCase();
 }
 
-searchPlace.addEventListener(
-  "input",
-  debounce(async () => {
-    const query = searchPlace.value.trim();
+const debouncedAddLists = debounce(addLists, 500);
 
-    if (query !== "") {
-      searchPlace.style.backgroundImage = "none";
-      lists.style.display = "block";
+searchPlace.addEventListener("input", () => {
+  debouncedAddLists();
+  setImage();
+});
 
-      const cities = await fetchCities(query);
+async function addLists() {
+  const query = searchPlace.value.trim();
 
-      if (!cities || !cities.results || cities.results.length === 0) {
-        lists.innerHTML = "<li>No results found</li>";
-        return;
-      }
+  if (query !== "") {
+    lists.style.display = "block";
 
-      let items = "";
-      let city = [];
+    const cities = await fetchCities(query);
 
-      for (let i = 0; i < cities.results.length; i++) {
-        const originalName = cities.results[i].name;
-        const normalizedName = normalize(originalName);
-
-        if (!city.includes(normalizedName)) {
-          city.push(normalizedName);
-          items += `<li>${originalName}</li>`;
-        }
-      }
-
-      lists.innerHTML = items;
-    } else {
-      searchPlace.style.backgroundImage =
-        "url(../assets/images/icon-search.svg)";
-      lists.style.display = "none";
-      lists.innerHTML = "";
+    if (!cities || !cities.results || cities.results.length === 0) {
+      lists.innerHTML = "<li>No results found</li>";
+      return;
     }
-  }, 800)
-);
+
+    let items = "";
+    let city = [];
+
+    for (let i = 0; i < cities.results.length; i++) {
+      const originalName = cities.results[i].name;
+      const normalizedName = normalize(originalName);
+
+      if (!city.includes(normalizedName)) {
+        city.push(normalizedName);
+        items += `<li>${originalName}</li>`;
+      }
+    }
+    lists.innerHTML = items;
+  } else {
+    lists.style.display = "none";
+    lists.innerHTML = "";
+  }
+}
+
+function setImage() {
+  const query = searchPlace.value.trim();
+  if (query !== "") {
+    searchPlace.style.backgroundImage = "none";
+    searchPlace.style.paddingLeft = "1rem";
+  } else {
+    searchPlace.style.backgroundImage = "url(../assets/images/icon-search.svg)";
+    searchPlace.style.paddingLeft = "2.5rem";
+  }
+}
 
 const fetchCities = async (place) => {
   const URL = `https://geocoding-api.open-meteo.com/v1/search?name=${place}&count=10&language=en&format=json`;
@@ -162,10 +173,11 @@ const addHourlyDetails = (data) => {
     const icon = getWeatherIcon(data.hourly.weather_code[idx]);
     image[i].src = `../assets/images/icon-${icon}.webp`;
 
-    temp[i].textContent = `${data.hourly.temperature_2m[idx]}${data.hourly_units.temperature_2m}`;
+    temp[
+      i
+    ].textContent = `${data.hourly.temperature_2m[idx]}${data.hourly_units.temperature_2m}`;
   }
 };
-
 
 navigator.geolocation.getCurrentPosition(
   async (pos) => {
