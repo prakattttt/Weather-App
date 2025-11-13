@@ -22,7 +22,7 @@ function normalize(name) {
     .toLowerCase();
 }
 
-const debouncedAddLists = debounce(addLists, 500);
+const debouncedAddLists = debounce(addLists, 850);
 
 searchPlace.addEventListener("input", () => {
   debouncedAddLists();
@@ -88,10 +88,10 @@ const fetchData = async (lat, lon) => {
   return data;
 };
 
-const addTodayDetails = (data) => {
+const addTodayDetails = (data, city) => {
   const address = document.querySelector(".address");
   const date = document.querySelector(".date");
-  address.textContent = data.timezone.split("/")[1];
+  address.textContent = city;
   const options = {
     weekday: "long",
     year: "numeric",
@@ -182,7 +182,7 @@ const addHourlyDetails = (data) => {
 navigator.geolocation.getCurrentPosition(
   async (pos) => {
     const data = await fetchData(pos.coords.latitude, pos.coords.longitude);
-    addTodayDetails(data);
+    addTodayDetails(data, "Your Location");
     addHourlyDetails(data);
     addDailyDetails(data);
   },
@@ -230,7 +230,7 @@ button.addEventListener("click", async (e) => {
     cities.results[0].latitude,
     cities.results[0].longitude
   );
-  addTodayDetails(data);
+  addTodayDetails(data, cities.results[0].name);
   addHourlyDetails(data);
   addDailyDetails(data);
 });
