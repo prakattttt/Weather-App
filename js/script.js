@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", () => {
+  showLoadingScreen();
+});
+
 let unit = "metric";
 let currCity = null;
 let currLat = null;
@@ -11,9 +15,36 @@ const lists = document.querySelector(".lists");
 const button = document.querySelector(".btn");
 const select = document.querySelector("#unit");
 const container = document.querySelector(".container");
+const loading = document.querySelector(".loading-screen");
+const text = document.querySelectorAll(".txt");
+
+function showLoadingScreen() {
+  loading.style.display = "flex";
+
+  text.forEach((t) => {
+    t.textContent = "-";
+  });
+
+  document.querySelector("#temp").textContent = "";
+
+  document.querySelector(".temperature img").src = "";
+
+  document.querySelectorAll(".weekday").forEach((el) => (el.textContent = ""));
+  document.querySelectorAll(".daily-max").forEach((el) => (el.textContent = ""));
+  document.querySelectorAll(".daily-min").forEach((el) => (el.textContent = ""));
+  document.querySelectorAll(".day p img").forEach((img) => (img.src = ""));
+
+  document.querySelectorAll(".time-hour").forEach((el) => (el.textContent = "--"));
+  document.querySelectorAll(".hourly-temp").forEach((el) => (el.textContent = "--"));
+  document.querySelectorAll(".hour p img").forEach((img) => (img.src = ""));
+}
+
+function hideLoadingScreen() {
+  loading.style.display = "none";
+}
 
 function populateDays() {
-  selectDay.innerHTML = "";
+  selectDay.innerHTML = "-";
   for (let i = 0; i < 7; i++) {
     const date = new Date();
     date.setDate(today.getDate() + i);
@@ -210,6 +241,7 @@ navigator.geolocation.getCurrentPosition(
     currLat = pos.coords.latitude;
     currLon = pos.coords.longitude;
     currCity = "Your Location";
+    hideLoadingScreen();
     addTodayDetails(weatherData, "Your Location");
     addHourlyDetails(weatherData, 0);
     addDailyDetails(weatherData);
@@ -220,6 +252,7 @@ navigator.geolocation.getCurrentPosition(
     currLat = 27.7172;
     currLon = 85.324;
     currCity = "Kathmandu";
+    hideLoadingScreen();
     addTodayDetails(weatherData, "Kathmandu");
     addHourlyDetails(weatherData, 0);
     addDailyDetails(weatherData);
@@ -244,6 +277,7 @@ document.addEventListener("click", () => {
 
 button.addEventListener("click", async (e) => {
   e.preventDefault();
+  showLoadingScreen();
   const location = searchPlace.value.trim();
   const cities = await fetchCities(location);
   if (!cities || !cities.results || cities.results.length === 0) {
@@ -254,6 +288,7 @@ button.addEventListener("click", async (e) => {
     cities.results[0].latitude,
     cities.results[0].longitude
   );
+  hideLoadingScreen();
   addTodayDetails(weatherData, cities.results[0].name);
   addHourlyDetails(weatherData, 0);
   addDailyDetails(weatherData);
