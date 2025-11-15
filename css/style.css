@@ -78,7 +78,7 @@ html {
 
 .err button {
   margin: 1rem;
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 0.5rem  0.5rem 2rem;
   font-size: 1.2rem;
   background-color: var(--neutral-700);
   color: var(--neutral-0);
