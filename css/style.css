@@ -23,6 +23,10 @@
   --fw-bold: 700;
 
   --fs-body: 1.125rem;
+
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.35s ease;
+  --transition-slow: 0.5s ease;
 }
 
 * {
@@ -37,6 +41,15 @@ body {
   color: var(--neutral-0);
   margin: 1.5rem 8rem;
   height: calc(100vh - 8rem);
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+}
+body.loaded {
+  opacity: 1;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .err {
@@ -46,6 +59,11 @@ body {
   justify-content: center;
   align-items: center;
   background-color: var(--neutral-900);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+.err.show {
+  opacity: 1;
 }
 
 .err h2 {
@@ -60,8 +78,7 @@ body {
 
 .err button {
   margin: 1rem;
-  padding: 0.5rem;
-  padding-left: 2rem;
+  padding: 0.5rem 2rem;
   font-size: 1.2rem;
   background-color: var(--neutral-700);
   color: var(--neutral-0);
@@ -70,12 +87,14 @@ body {
   font-weight: var(--fw-semibold);
   background-image: url(../assets/images/icon-retry.svg);
   background-repeat: no-repeat;
-  background-position: 0.5rem;
+  background-position: 0.5rem center;
+  transition: transform var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .err button:hover {
   cursor: pointer;
-  scale: 1.05;
+  transform: scale(1.05);
 }
 
 .loading-screen {
@@ -89,6 +108,23 @@ body {
   background: var(--neutral-800);
   border-radius: 1.25rem;
   z-index: 10;
+  animation: pulse 1.8s infinite ease-in-out;
+  opacity: 1;
+  transition: opacity var(--transition-normal);
+}
+.loading-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
 }
 
 .loading-screen h3 {
@@ -97,7 +133,7 @@ body {
   background-repeat: no-repeat;
   background-size: 2rem;
   padding-right: 3rem;
-  background-position: 8rem;
+  background-position: 8rem center;
 }
 
 .flex {
@@ -125,6 +161,13 @@ body {
   background-position: 0.625rem center, calc(100% - 0.625rem) center;
   font-size: 0.75rem;
   background-size: 0.75rem, 0.625rem;
+  transition: background-color var(--transition-fast),
+    transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#unit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .upper-header .text h1 {
@@ -154,10 +197,14 @@ body {
   background-repeat: no-repeat;
   background-position: 0.75rem center;
   background-size: 1rem;
+  transition: background-color var(--transition-fast),
+    transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 #place:focus {
   outline: none;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .input-container {
@@ -167,6 +214,8 @@ body {
 
 .lists {
   display: none;
+  opacity: 0;
+  transform: translateY(-8px);
   z-index: 100;
   position: absolute;
   top: 100%;
@@ -177,12 +226,20 @@ body {
   margin: 0.625rem;
   border-radius: 0.5rem;
   box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.3);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.lists.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .lists li {
   list-style: none;
   padding: 0.625rem;
   margin: 0.3125rem;
+  transition: background-color var(--transition-fast);
 }
 
 .lists li:hover {
@@ -201,10 +258,18 @@ body {
   border: none;
   border-radius: 0.5rem;
   font-weight: var(--fw-semibold);
+  transition: background-color var(--transition-fast),
+    transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .btn:hover {
   cursor: pointer;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+  transform: translateY(0);
 }
 
 .main-section {
@@ -230,6 +295,15 @@ body {
   align-items: center;
   justify-content: space-between;
   position: relative;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.actual-info.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .temperature {
@@ -288,6 +362,15 @@ body {
   border-radius: 0.9375rem;
   height: 5rem;
   background-color: var(--neutral-800);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.box.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .box p {
@@ -323,6 +406,20 @@ body {
   background-color: var(--neutral-800);
   border: 0.125rem solid var(--neutral-700);
   border-radius: 0.9375rem;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--transition-normal),
+    transform var(--transition-normal), box-shadow var(--transition-fast);
+}
+
+.day.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.day:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
 
 .day p {
@@ -373,6 +470,11 @@ body {
   background-position: calc(100% - 0.625rem) center;
   font-size: 0.875rem;
   background-size: 0.625rem;
+  transition: transform var(--transition-fast);
+}
+
+#day:hover {
+  transform: translateY(-1px);
 }
 
 .hours {
@@ -390,6 +492,15 @@ body {
   height: 2.7rem;
   padding: 0 1rem;
   border-radius: 0.5rem;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.hour.visible {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .hour p {
@@ -401,77 +512,83 @@ body {
   width: 2rem;
 }
 
+#temp,
+.txt,
+.daily-max,
+.daily-min,
+.hourly-temp {
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+#temp.pop,
+.txt.pop,
+.daily-max.pop,
+.daily-min.pop,
+.hourly-temp.pop {
+  transform: scale(1.2);
+}
+
 @media (max-width: 1250px) {
   body {
     margin: 1.5rem 2rem;
     height: calc(100vh - 6rem);
   }
-
   .weather-info {
     width: 36rem;
   }
-
   .hourly-forecast {
     width: 16rem;
   }
-
   .main-section {
     flex-direction: column;
     align-items: center;
     gap: 2rem;
   }
-
   .weather-info,
   .hourly-forecast {
     width: 100%;
     max-width: 40rem;
   }
-
   .actual-info {
     margin-bottom: 0.5rem;
   }
-
   .hourly-forecast {
     padding: 1.5rem;
   }
-
   .sub-info {
     margin-top: 0.5rem;
     gap: 0.75rem;
     flex-wrap: wrap;
   }
-
   .box {
     height: 6rem;
     margin: 0;
     width: calc(50% - 0.5rem);
   }
-
   .days {
     flex-wrap: wrap;
   }
-
   .day {
     max-width: none;
     width: 7.25rem;
     height: 10rem;
   }
-
   .daily-temp span {
     font-size: 1rem;
     padding: 0.75rem;
   }
-
   .day p img {
     margin: 0.5rem;
   }
-
   .hours {
     gap: 0.75rem;
   }
-
   .hour {
     height: 3.5rem;
+  }
+  #temp {
+    margin-left: 0;
+    font-size: 3.5rem;
   }
 }
 
@@ -480,31 +597,25 @@ body {
     font-size: 2rem;
     margin: 2rem;
   }
-
   .input-container {
     width: 100%;
   }
-
   #place {
     width: 100%;
     height: 2.5rem;
     margin: auto;
     max-width: 40rem;
   }
-
   .search-bar {
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     gap: 0.75rem;
   }
-
   .btn {
     width: 100%;
     height: 2.5rem;
     max-width: 40rem;
   }
-
   .main-section {
     max-width: 40rem;
     margin: auto;
@@ -516,46 +627,36 @@ body {
     margin: 1rem;
     height: calc(100vh - 4rem);
   }
-
   .upper-header .text h1 {
     font-size: 2.5rem;
   }
-
   #place {
     font-size: 0.875rem;
     padding: 0 0.75rem 0 2.25rem;
   }
-
   .actual-info {
     flex-direction: column;
     height: 14rem;
     background-size: cover;
   }
-
   .temperature span {
     font-size: 5rem;
   }
-
   .location .address {
     font-size: 2rem;
   }
-
   .location .date {
     font-size: 1.2rem;
   }
-
   .hour {
     height: 3rem;
   }
-
   .mini-dropdown h4 {
     font-size: 0.875rem;
   }
-
   .days {
     gap: 0.5rem;
   }
-
   #day {
     font-size: 0.75rem;
     padding: 0.4rem;
@@ -566,26 +667,21 @@ body {
   .days {
     flex-direction: column;
   }
-
   .day {
     width: 100%;
     height: 5rem;
     flex-direction: row;
     justify-content: space-around;
   }
-
   #day {
     min-width: 6rem;
   }
-
   .day p {
     flex-direction: row;
   }
-
   .navbar img {
     width: 7.5rem;
   }
-
   #unit {
     width: 6rem;
   }

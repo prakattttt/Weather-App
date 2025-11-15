@@ -19,32 +19,38 @@ const loading = document.querySelector(".loading-screen");
 const text = document.querySelectorAll(".txt");
 
 function showLoadingScreen() {
-  loading.style.display = "flex";
-
-  text.forEach((t) => {
-    t.textContent = "-";
-  });
-
+  loading.classList.remove("hidden");
+  text.forEach((t) => { t.textContent = "-"; });
   document.querySelector("#temp").textContent = "";
-
   document.querySelector(".temperature img").src = "";
-
   document.querySelectorAll(".weekday").forEach((el) => (el.textContent = ""));
   document.querySelectorAll(".daily-max").forEach((el) => (el.textContent = ""));
   document.querySelectorAll(".daily-min").forEach((el) => (el.textContent = ""));
   document.querySelectorAll(".day p img").forEach((img) => (img.src = ""));
-
   document.querySelectorAll(".time-hour").forEach((el) => (el.textContent = "--"));
   document.querySelectorAll(".hourly-temp").forEach((el) => (el.textContent = "--"));
   document.querySelectorAll(".hour p img").forEach((img) => (img.src = ""));
 }
 
 function hideLoadingScreen() {
-  loading.style.display = "none";
+  loading.classList.add("hidden");
+  document.body.classList.add("loaded"); 
+}
+
+function staggerFade(elements, delay = 60) {
+  elements.forEach((el, i) => {
+    setTimeout(() => el.classList.add("visible"), i * delay);
+  });
+}
+
+function pop(el) {
+  if (!el) return;
+  el.classList.add("pop");
+  setTimeout(() => el.classList.remove("pop"), 180);
 }
 
 function populateDays() {
-  selectDay.innerHTML = "-";
+  selectDay.innerHTML = "";
   for (let i = 0; i < 7; i++) {
     const date = new Date();
     date.setDate(today.getDate() + i);
@@ -98,8 +104,8 @@ searchPlace.addEventListener("input", () => {
 
 async function addLists() {
   const query = searchPlace.value.trim();
+  lists.classList.toggle("show", query !== "");
   if (query !== "") {
-    lists.style.display = "block";
     const cities = await fetchCities(query);
     if (!cities || !cities.results || cities.results.length === 0) {
       lists.innerHTML = "<li>No results found</li>";
@@ -117,7 +123,6 @@ async function addLists() {
     }
     lists.innerHTML = items;
   } else {
-    lists.style.display = "none";
     lists.innerHTML = "";
   }
 }
@@ -139,7 +144,7 @@ const fetchCities = async (place) => {
     const res = await fetch(URL);
     if (!res.ok) throw new Error("Invalid response!");
     const data = await res.json();
-    if (!data) throw new Error("Failed to retrive data!");
+    if (!data) throw new Error("Failed to retrieve data!");
     return data;
   } catch (err) {
     errorHandler(err.message);
@@ -157,7 +162,7 @@ const fetchData = async (lat, lon) => {
     const res = await fetch(URL);
     if (!res.ok) throw new Error("Invalid response!");
     const data = await res.json();
-    if (!data) throw new Error("Failed to retrive data!");
+    if (!data) throw new Error("Failed to retrieve data!");
     return data;
   } catch (err) {
     errorHandler(err.message);
@@ -167,34 +172,28 @@ const fetchData = async (lat, lon) => {
 const addTodayDetails = (data, city) => {
   const address = document.querySelector(".address");
   const date = document.querySelector(".date");
+  const tempEl = document.querySelector("#temp");
+  const feelsLike = document.querySelector("#feels-like-text");
+  const humidity = document.querySelector("#humidity-text");
+  const wind = document.querySelector("#wind-text");
+  const precipitation = document.querySelector("#precipitation-text");
+
   address.textContent = city;
-  const options = {
-    weekday: "long",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  };
-  const newDate = today.toLocaleDateString("en-US", options);
-  date.textContent = newDate;
-  document.querySelector(
-    "#temp"
-  ).textContent = `${data.current.temperature_2m}${data.current_units.temperature_2m}`;
-  document.querySelector(
-    "#feels-like-text"
-  ).textContent = `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`;
-  document.querySelector(
-    "#humidity-text"
-  ).textContent = `${data.current.relative_humidity_2m}${data.current_units.relative_humidity_2m}`;
-  document.querySelector(
-    "#wind-text"
-  ).textContent = `${data.current.wind_speed_10m} ${data.current_units.wind_speed_10m}`;
-  document.querySelector(
-    "#precipitation-text"
-  ).textContent = `${data.current.precipitation} ${data.current_units.precipitation}`;
+  const options = { weekday: "long", year: "numeric", month: "short", day: "numeric" };
+  date.textContent = today.toLocaleDateString("en-US", options);
+
+  tempEl.textContent = `${data.current.temperature_2m}${data.current_units.temperature_2m}`;
+  feelsLike.textContent = `${data.current.apparent_temperature}${data.current_units.apparent_temperature}`;
+  humidity.textContent = `${data.current.relative_humidity_2m}${data.current_units.relative_humidity_2m}`;
+  wind.textContent = `${data.current.wind_speed_10m} ${data.current_units.wind_speed_10m}`;
+  precipitation.textContent = `${data.current.precipitation} ${data.current_units.precipitation}`;
+
   const icon = getWeatherIcon(data.current.weather_code);
-  document.querySelector(
-    ".temperature img"
-  ).src = `../assets/images/icon-${icon}.webp`;
+  document.querySelector(".temperature img").src = `../assets/images/icon-${icon}.webp`;
+
+  document.querySelector('.actual-info').classList.add('visible');
+  staggerFade(document.querySelectorAll('.sub-info .box'), 80);
+  pop(tempEl); pop(feelsLike); pop(humidity); pop(wind); pop(precipitation);
 };
 
 const addDailyDetails = (data) => {
@@ -202,16 +201,18 @@ const addDailyDetails = (data) => {
   const images = document.querySelectorAll(".day p img");
   const min = document.querySelectorAll(".daily-min");
   const max = document.querySelectorAll(".daily-max");
+
   for (let i = 0; i < week.length; i++) {
     const dateObj = new Date(data.daily.time[i]);
-    week[i].textContent = dateObj.toLocaleDateString("en-US", {
-      weekday: "short",
-    });
+    week[i].textContent = dateObj.toLocaleDateString("en-US", { weekday: "short" });
     const icon = getWeatherIcon(data.daily.weather_code[i]);
     images[i].src = `../assets/images/icon-${icon}.webp`;
     min[i].textContent = data.daily.temperature_2m_min[i];
     max[i].textContent = data.daily.temperature_2m_max[i];
+    pop(min[i]); pop(max[i]);
   }
+
+  staggerFade(document.querySelectorAll('.daily-forecast .day'), 50);
 };
 
 const addHourlyDetails = (data, dayIndex = 0) => {
@@ -219,20 +220,19 @@ const addHourlyDetails = (data, dayIndex = 0) => {
   const images = document.querySelectorAll(".hour p img");
   const temps = document.querySelectorAll(".hourly-temp");
   const startIndex = dayIndex * 24;
+
   for (let i = 0; i < hours.length; i++) {
     const idx = startIndex + i;
     if (idx >= data.hourly.time.length) break;
     const dateObj = new Date(data.hourly.time[idx]);
-    hours[i].textContent = dateObj.toLocaleTimeString([], {
-      hour: "2-digit",
-      hour12: true,
-    });
+    hours[i].textContent = dateObj.toLocaleTimeString([], { hour: "2-digit", hour12: true });
     const icon = getWeatherIcon(data.hourly.weather_code[idx]);
     images[i].src = `../assets/images/icon-${icon}.webp`;
-    temps[
-      i
-    ].textContent = `${data.hourly.temperature_2m[idx]}${data.hourly_units.temperature_2m}`;
+    temps[i].textContent = `${data.hourly.temperature_2m[idx]}${data.hourly_units.temperature_2m}`;
+    pop(temps[i]);
   }
+
+  staggerFade(document.querySelectorAll('.hourly-forecast .hour'), 40);
 };
 
 navigator.geolocation.getCurrentPosition(
@@ -271,8 +271,10 @@ function getWeatherIcon(code) {
   return "sunny";
 }
 
-document.addEventListener("click", () => {
-  lists.style.display = "none";
+document.addEventListener("click", (e) => {
+  if (!e.target.closest('.input-container')) {
+    lists.classList.remove("show");
+  }
 });
 
 button.addEventListener("click", async (e) => {
@@ -282,12 +284,10 @@ button.addEventListener("click", async (e) => {
   const cities = await fetchCities(location);
   if (!cities || !cities.results || cities.results.length === 0) {
     alert("No cities found! Try again!");
+    hideLoadingScreen();
     return;
   }
-  weatherData = await fetchData(
-    cities.results[0].latitude,
-    cities.results[0].longitude
-  );
+  weatherData = await fetchData(cities.results[0].latitude, cities.results[0].longitude);
   hideLoadingScreen();
   addTodayDetails(weatherData, cities.results[0].name);
   addHourlyDetails(weatherData, 0);
@@ -298,20 +298,19 @@ button.addEventListener("click", async (e) => {
 });
 
 lists.addEventListener("click", (e) => {
-  e.preventDefault();
-  searchPlace.value = e.target.textContent;
+  if (e.target.tagName === "LI") {
+    searchPlace.value = e.target.textContent;
+    lists.classList.remove("show");
+  }
 });
 
 function errorHandler(err) {
-  container.classList.add("err");
+  container.classList.add("err", "show");
   container.innerHTML = `<h2>Something went wrong!</h2>
   <p>${err || "Unknown Error!"}</p>
   <button id="refresh">Refresh</button>`;
 
-  const refresh = document.querySelector("#refresh");
-
-  refresh.addEventListener("click", (e) => {
-    e.preventDefault();
+  document.querySelector("#refresh").addEventListener("click", () => {
     window.location.reload();
   });
 }
