@@ -20,21 +20,31 @@ const text = document.querySelectorAll(".txt");
 
 function showLoadingScreen() {
   loading.classList.remove("hidden");
-  text.forEach((t) => { t.textContent = "-"; });
+  text.forEach((t) => {
+    t.textContent = "-";
+  });
   document.querySelector("#temp").textContent = "";
   document.querySelector(".temperature img").src = "";
   document.querySelectorAll(".weekday").forEach((el) => (el.textContent = ""));
-  document.querySelectorAll(".daily-max").forEach((el) => (el.textContent = ""));
-  document.querySelectorAll(".daily-min").forEach((el) => (el.textContent = ""));
+  document
+    .querySelectorAll(".daily-max")
+    .forEach((el) => (el.textContent = ""));
+  document
+    .querySelectorAll(".daily-min")
+    .forEach((el) => (el.textContent = ""));
   document.querySelectorAll(".day p img").forEach((img) => (img.src = ""));
-  document.querySelectorAll(".time-hour").forEach((el) => (el.textContent = "--"));
-  document.querySelectorAll(".hourly-temp").forEach((el) => (el.textContent = "--"));
+  document
+    .querySelectorAll(".time-hour")
+    .forEach((el) => (el.textContent = "--"));
+  document
+    .querySelectorAll(".hourly-temp")
+    .forEach((el) => (el.textContent = "--"));
   document.querySelectorAll(".hour p img").forEach((img) => (img.src = ""));
 }
 
 function hideLoadingScreen() {
   loading.classList.add("hidden");
-  document.body.classList.add("loaded"); 
+  document.body.classList.add("loaded");
 }
 
 function staggerFade(elements, delay = 60) {
@@ -179,7 +189,12 @@ const addTodayDetails = (data, city) => {
   const precipitation = document.querySelector("#precipitation-text");
 
   address.textContent = city;
-  const options = { weekday: "long", year: "numeric", month: "short", day: "numeric" };
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
   date.textContent = today.toLocaleDateString("en-US", options);
 
   tempEl.textContent = `${data.current.temperature_2m}${data.current_units.temperature_2m}`;
@@ -189,11 +204,17 @@ const addTodayDetails = (data, city) => {
   precipitation.textContent = `${data.current.precipitation} ${data.current_units.precipitation}`;
 
   const icon = getWeatherIcon(data.current.weather_code);
-  document.querySelector(".temperature img").src = `../assets/images/icon-${icon}.webp`;
+  document.querySelector(
+    ".temperature img"
+  ).src = `../assets/images/icon-${icon}.webp`;
 
-  document.querySelector('.actual-info').classList.add('visible');
-  staggerFade(document.querySelectorAll('.sub-info .box'), 80);
-  pop(tempEl); pop(feelsLike); pop(humidity); pop(wind); pop(precipitation);
+  document.querySelector(".actual-info").classList.add("visible");
+  staggerFade(document.querySelectorAll(".sub-info .box"), 80);
+  pop(tempEl);
+  pop(feelsLike);
+  pop(humidity);
+  pop(wind);
+  pop(precipitation);
 };
 
 const addDailyDetails = (data) => {
@@ -204,15 +225,18 @@ const addDailyDetails = (data) => {
 
   for (let i = 0; i < week.length; i++) {
     const dateObj = new Date(data.daily.time[i]);
-    week[i].textContent = dateObj.toLocaleDateString("en-US", { weekday: "short" });
+    week[i].textContent = dateObj.toLocaleDateString("en-US", {
+      weekday: "short",
+    });
     const icon = getWeatherIcon(data.daily.weather_code[i]);
     images[i].src = `../assets/images/icon-${icon}.webp`;
     min[i].textContent = data.daily.temperature_2m_min[i];
     max[i].textContent = data.daily.temperature_2m_max[i];
-    pop(min[i]); pop(max[i]);
+    pop(min[i]);
+    pop(max[i]);
   }
 
-  staggerFade(document.querySelectorAll('.daily-forecast .day'), 50);
+  staggerFade(document.querySelectorAll(".daily-forecast .day"), 50);
 };
 
 const addHourlyDetails = (data, dayIndex = 0) => {
@@ -225,14 +249,19 @@ const addHourlyDetails = (data, dayIndex = 0) => {
     const idx = startIndex + i;
     if (idx >= data.hourly.time.length) break;
     const dateObj = new Date(data.hourly.time[idx]);
-    hours[i].textContent = dateObj.toLocaleTimeString([], { hour: "2-digit", hour12: true });
+    hours[i].textContent = dateObj.toLocaleTimeString([], {
+      hour: "2-digit",
+      hour12: true,
+    });
     const icon = getWeatherIcon(data.hourly.weather_code[idx]);
     images[i].src = `../assets/images/icon-${icon}.webp`;
-    temps[i].textContent = `${data.hourly.temperature_2m[idx]}${data.hourly_units.temperature_2m}`;
+    temps[
+      i
+    ].textContent = `${data.hourly.temperature_2m[idx]}${data.hourly_units.temperature_2m}`;
     pop(temps[i]);
   }
 
-  staggerFade(document.querySelectorAll('.hourly-forecast .hour'), 40);
+  staggerFade(document.querySelectorAll(".hourly-forecast .hour"), 40);
 };
 
 navigator.geolocation.getCurrentPosition(
@@ -272,7 +301,7 @@ function getWeatherIcon(code) {
 }
 
 document.addEventListener("click", (e) => {
-  if (!e.target.closest('.input-container')) {
+  if (!e.target.closest(".input-container")) {
     lists.classList.remove("show");
   }
 });
@@ -287,7 +316,10 @@ button.addEventListener("click", async (e) => {
     hideLoadingScreen();
     return;
   }
-  weatherData = await fetchData(cities.results[0].latitude, cities.results[0].longitude);
+  weatherData = await fetchData(
+    cities.results[0].latitude,
+    cities.results[0].longitude
+  );
   hideLoadingScreen();
   addTodayDetails(weatherData, cities.results[0].name);
   addHourlyDetails(weatherData, 0);
